@@ -1,0 +1,17 @@
+load("//:can_i_find.bzl", "can_i_find")
+
+can_i_find(
+    name = "check-succeeds",
+    data = ["//:some_data/dog.yaml"],  # data is a file
+)
+
+can_i_find(
+    name = "check-fails",
+    data = ["//:some_data"],  # data is a filegroup()
+)
+
+sh_binary(
+    name = "check-repaired",
+    srcs = [":check-fails"],
+    data = ["//:some_data"],  # data is a filegroup()
+)
