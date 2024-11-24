@@ -1,0 +1,7 @@
+exports_files(["some_data/dog.yaml"])
+
+filegroup(
+    name = "some_data",
+    data = glob(["some_data/**"]),
+    visibility = ["//visibility:public"],
+)
