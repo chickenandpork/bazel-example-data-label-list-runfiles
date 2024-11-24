@@ -1,17 +1,42 @@
 load("//:can_i_find.bzl", "can_i_find")
 
+# Running this -- the `data` providing a direct source file -- the `some_data/dig.yaml` is present
+# in the `find` output, so this runfiles provides the mentioned file to the exec of the generated
+# script.
 can_i_find(
     name = "check-succeeds",
     data = ["//:some_data/dog.yaml"],  # data is a file
 )
 
+# Running this -- the `data` providing a direct source file indirectly through a filegroup() -- the
+# `some_data/dig.yaml` is NOT present in the `find` output, so this runfiles DOES NOT provide the
+# mentioned file to the exec of the generated script.
 can_i_find(
     name = "check-fails",
     data = ["//:some_data"],  # data is a filegroup()
 )
 
+# Running this -- a basic wrap of the failing test -- finds that the filegroup() dependency *IS*
+# properly propagated to the runfiles, DOES provide the required file to the environment of the
+# running script, passing the run.
 sh_binary(
     name = "check-repaired",
     srcs = [":check-fails"],
     data = ["//:some_data"],  # data is a filegroup()
+)
+
+# This test confirms that data file is found if used as a direct file in the label_list().  This
+# would start to fail if something broke in that construct.
+sh_test(
+    name = "recheck-succeeds",
+    srcs = [":check-succeeds"],
+)
+
+# This test confirms that data file is found if provided indirectly in a filegroup() in the
+# label_list().  This initially fails until the `collect_default = True` is added to the
+# `runfiles = ctx.runfiles()` call.  Since (IIRC) `collect_default` is a deprecated argument, it
+# may fail in future, so this test will canary that change so long as we keep up with updates.
+sh_test(
+    name = "recheck-fails",
+    srcs = [":check-fails"],
 )
