@@ -4,7 +4,7 @@ module(
     compatibility_level = 1,
 )
 
-bazel_dep(name = "bazel_skylib", version = "1.9.0")
+bazel_dep(name = "bazel_skylib", version = "1.9.2")
 
 # bazel run @buildifier_prebuilt//:buildifier -- -v -r $(pwd)
 bazel_dep(name = "buildifier_prebuilt", version = "8.5.1.3", dev_dependency = True)
