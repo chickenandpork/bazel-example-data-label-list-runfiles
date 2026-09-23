@@ -7,4 +7,4 @@ module(
 bazel_dep(name = "bazel_skylib", version = "1.9.2")
 
 # bazel run @buildifier_prebuilt//:buildifier -- -v -r $(pwd)
-bazel_dep(name = "buildifier_prebuilt", version = "8.5.1.4", dev_dependency = True)
+bazel_dep(name = "buildifier_prebuilt", version = "10.1.0", dev_dependency = True)
